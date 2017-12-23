@@ -11,6 +11,12 @@
   "bin": {
     "wpbase": "index.js"
   },
-  "keywords": [ "cli", "wordpress" ],
-  "dependencies": {}
+  "keywords": [
+    "cli",
+    "wordpress"
+  ],
+  "dependencies": {
+    "download-git-repo": "^1.0.1",
+    "request": "^2.83.0"
+  }
 }
