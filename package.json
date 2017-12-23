@@ -1,0 +1,20 @@
+{
+  "name": "wpbase",
+  "version": "1.0.0",
+  "description": "A CLI client for managing your Wordpress development.",
+  "author": {
+    "name": "Max Sandelin",
+    "url": "https://maxsandelin.com/"
+  },
+  "respository": "themaxsandelin/wpbase",
+  "license": "MIT",
+  "bin": {
+    "wpbase": "index.js"
+  },
+  "keywords": [ "cli", "wordpress" ],
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "download-git-repo": "^1.0.1",
+    "request": "^2.83.0"
+  }
+}
