@@ -4,56 +4,84 @@
  * Dependencies
 */
 const fs = require('fs');
-const request = require('request');
-const download = require('download-git-repo');
-
-/**
- * Project config variables
-*/
-const configFileName = 'wpbase.json';
-const wpHashUrl = 'https://api.wordpress.org/secret-key/1.1/salt/';
+const dotenv = require('dotenv');
 
 
 /**
- * Grab the CLI arguments
+ * WPBase files
+ */
+const Wordpress = require('./src/wordpress.js')();
+
+
+/**
+ * User project variables
 */
-const args = process.argv.splice(2, process.argv.length);
-
-
-
 const projectPath = process.cwd();
 const projectFolder = projectPath.substring(projectPath.lastIndexOf('/') + 1, projectPath.length);
-const currentFiles = fs.readdirSync(projectPath);
+let projectFiles = fs.readdirSync(projectPath);
 
-let config;
-if (currentFiles.indexOf(configFileName) === -1) {
-  config = JSON.parse(fs.readFileSync(__dirname + '/default-config.json', 'utf8'));
-  config.DB_NAME = projectFolder;
-} else {
-  config = fs.readFileSync(projectPath + '/' + configFileName, 'utf8');
-  if (!JSON.parse(config)) return console.log(new Error('Invalid JSON format in ' . configFileName));
-
-  config = JSON.parse(config);
+/** Load .env file for the project. */
+let projectEnv;
+if (projectFiles.indexOf('.env') > -1) {
+  projectEnv = dotenv.parse( new Buffer( fs.readFileSync(projectPath + '/.env', 'utf8') ) );
 }
 
 
-let wpConfigString = "/*\n MySQL parameters \n*/\n\n";
-wpConfigString += "define('DB_NAME', '" + config.DB_NAME + "');\n";
-wpConfigString += "define('DB_USER', '" + config.DB_USER + "');\n";
-wpConfigString += "define('DB_PASSWORD', '" + config.DB_PASSWORD + "');\n";
-wpConfigString += "define('DB_HOST', '" + config.DB_HOST + "');\n\n\n";
+/**
+ * Set up main script based on passed arguments.
+*/
+const args = process.argv.splice(2, process.argv.length);
 
-console.log('Fetching Wordpress hashes..');
-request(wpHashUrl, (err, res, body) => {
+/** No arguments given, display default screen. */
+if (!args.length) return displayDefaultScreen();
 
-  wpConfigString += "/*\n Wordpress hashes \n*/\n\n";
-  wpConfigString += body;
+const action = args[0];
+if (action === '-h') return displayHelpScreen();
+if (action === 'init') return initializeProject();
 
-  console.log(wpConfigString);
-});
+console.log(action);
 
-// download('WordPress/WordPress', 'wordpress', (error) => {
-//   if (error) return console.log(error);
 
-//   console.log('Wordpress downloaded!');
-// });
+
+
+function displayDefaultScreen() {
+  console.log('');
+  console.log('Thank you for using WPBase for your Wordpress project! 🙌');
+  console.log('');
+  console.log('  > Type [wpbase -h] to display the help screen and learn how to use it.');
+  console.log('');
+}
+
+function displayHelpScreen() {
+
+}
+
+function initializeProject() {
+  /**
+   * Initialization process:
+   * 
+   * 1. Make sure there is a wp-config file.
+   * 2. Make sure there is a Wordpress directory
+   * 3. Set up /src directory for working on the theme.
+   * 4. Ensure there is a build config file for whatever building library the user selects, start with Gulp for now.
+   */
+  
+  Wordpress.ensure(projectPath, projectFiles, projectEnv)
+    .then(() => {
+
+    })
+  .catch((error) => {
+    console.log(error);
+  });
+
+
+  // ensureWpConfigFile()
+  //   .then((status) => {
+
+  //   })
+  // .catch((error) => {
+  //   console.log(error);
+  // });
+
+  
+}

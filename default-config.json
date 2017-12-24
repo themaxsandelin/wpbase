@@ -1,5 +1,9 @@
 {
   "DB_USER": "root",
   "DB_PASSWORD": "root",
-  "DB_HOST": "localhost"
+  "DB_HOST": "localhost",
+  "DB_CHARSET": "utf8",
+  "DB_COLLATE": "",
+  "TABLE_PREFIX": "wp_",
+  "WP_DEBUG": 0
 }

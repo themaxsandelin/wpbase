@@ -16,6 +16,7 @@
     "wordpress"
   ],
   "dependencies": {
+    "dotenv": "^4.0.0",
     "download-git-repo": "^1.0.1",
     "request": "^2.83.0"
   }
