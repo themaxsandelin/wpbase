@@ -12,22 +12,22 @@ function Wordpress() {
   const silenceIsGolden = "<?php\n// Silence is golden.";
 
   /** Ensure that the project has Wordpress downloaded and that the /wp-content and it's sub folders exists. */
-  function ensure(projectPath, projectFiles, projectEnv) {
+  function ensure(project) {
     return new Promise((resolve, reject) => {
-      if (projectFiles.indexOf('wordpress') > -1) {
+      if (project.files.indexOf('wordpress') > -1) {
         console.log('Wordpress folder found.');
 
-        ensureWpContentFolder(projectPath)
-          .then(ensureConfigFile(projectPath, projectEnv, false))  
+        ensureWpContentFolder(project)
+          .then(ensureConfigFile(project, false))  
           .then(() => resolve())
         .catch((error) => reject(error));
       } else {
         console.log('No wordpress folder found, downloading wordpress..');
-        download('WordPress/WordPress', projectPath + '/wordpress', (error) => {
+        download('WordPress/WordPress', project.path + '/wordpress', (error) => {
           if (error) return reject(error);
 
           console.log('Wordpress downloaded.');
-          ensureConfigFile(projectPath, projectEnv, true)
+          ensureConfigFile(project, true)
             .then(() => resolve())
           .catch((error) => reject(error));
         });
@@ -36,9 +36,9 @@ function Wordpress() {
   }
 
   /** Ensure that the whole /wp-content folder (incl. sub folders) exists */
-  function ensureWpContentFolder(projectPath) {
+  function ensureWpContentFolder(project) {
     return new Promise((resolve, reject) => {
-      const wordpressPath = projectPath + '/wordpress';
+      const wordpressPath = project.path + '/wordpress';
       let wpContentCreated = false;
 
       /** Ensure that the /wp-content folder exists */
@@ -71,11 +71,11 @@ function Wordpress() {
    * If it doesn't, create it based on the default config
    * And if the user project has a .env file, take it into consideration
    */
-  function ensureConfigFile(projectPath, projectEnv, downloaded) {
+  function ensureConfigFile(project, downloaded) {
     return new Promise((resolve, reject) => {
       if (!downloaded) {
         /** Check if there already is a wp-config.php file. */
-        const wordpressFiles = fs.readdirSync(projectPath + '/wordpress');
+        const wordpressFiles = fs.readdirSync(project.path + '/wordpress');
         if (wordpressFiles.indexOf('wp-config.php') > -1) {
           console.log('wp-config.php file found.');
           return resolve();
@@ -86,15 +86,15 @@ function Wordpress() {
 
       /** Setup config parameters from default config and user defined .env file. */
       let config = defaultConfig;
-      if (projectEnv) {
-        if (projectEnv.DB_NAME) config.DB_NAME = projectEnv.DB_NAME;
-        if (projectEnv.DB_USER) config.DB_USER = projectEnv.DB_USER;
-        if (projectEnv.DB_PASSWORD) config.DB_PASSWORD = projectEnv.DB_PASSWORD;
-        if (projectEnv.DB_HOST) config.DB_HOST = projectEnv.DB_HOST;
-        if (projectEnv.DB_CHARSET) config.DB_CHARSET = projectEnv.DB_CHARSET;
-        if (projectEnv.DB_COLLATE) config.DB_COLLATE = projectEnv.DB_COLLATE;
-        if (projectEnv.TABLE_PREFIX) config.TABLE_PREFIX = projectEnv.TABLE_PREFIX;
-        if (projectEnv.WP_DEBUG) config.WP_DEBUG = projectEnv.WP_DEBUG;
+      if (project.env) {
+        if (project.env.DB_NAME) config.DB_NAME = project.env.DB_NAME;
+        if (project.env.DB_USER) config.DB_USER = project.env.DB_USER;
+        if (project.env.DB_PASSWORD) config.DB_PASSWORD = project.env.DB_PASSWORD;
+        if (project.env.DB_HOST) config.DB_HOST = project.env.DB_HOST;
+        if (project.env.DB_CHARSET) config.DB_CHARSET = project.env.DB_CHARSET;
+        if (project.env.DB_COLLATE) config.DB_COLLATE = project.env.DB_COLLATE;
+        if (project.env.TABLE_PREFIX) config.TABLE_PREFIX = project.env.TABLE_PREFIX;
+        if (project.env.WP_DEBUG) config.WP_DEBUG = project.env.WP_DEBUG;
         console.log('Project .env file found, added user defined wp-config parameters.');
       } else {
         console.log('No .env file found, used default configuration for wp-config parameters.');
@@ -129,7 +129,7 @@ function Wordpress() {
         wpConfigString += "require_once(ABSPATH . 'wp-settings.php');\n";
 
         /** Write the contents to a wp-config.php file. */
-        fs.writeFileSync(projectPath + '/wordpress/wp-config.php', wpConfigString);
+        fs.writeFileSync(project.path + '/wordpress/wp-config.php', wpConfigString);
         console.log('wp-config file created.');
         resolve();
       });
