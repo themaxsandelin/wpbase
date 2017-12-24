@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
  * WPBase files
  */
 const Wordpress = require('./wordpress.js')();
+const Development = require('./development.js')();
 
 
 function Core() {
@@ -50,11 +51,11 @@ function Core() {
 
     Wordpress.ensure(project)
       .then(() => {
-
+        Development.ensureEnvironment(project)
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   return {
