@@ -7,7 +7,9 @@ Install the module globally from npm
 `$ npm install -g wpbase`
 
 ## Usage
-All commands begin with the `wpbase` keyword. You can type the following at any time in your command line to view the help screen.
+All commands begin with the `wpbase` keyword.
+
+You can type the following at any time in your command line to view the help screen.  
 `$ wpbase -h`
 
 ### Setup
