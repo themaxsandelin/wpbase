@@ -7,7 +7,7 @@ const download = require('download-git-repo');
 
 function Wordpress() {
   
-  const defaultConfig = JSON.parse(fs.readFileSync(__dirname + '/../default-config.json', 'utf8'));
+  const defaultConfig = JSON.parse(fs.readFileSync(__dirname + '/default-files/config.json', 'utf8'));
   const wpHashUrl = 'https://api.wordpress.org/secret-key/1.1/salt/';
   const silenceIsGolden = "<?php\n// Silence is golden.";
 
@@ -89,6 +89,8 @@ function Wordpress() {
 
       /** Setup config parameters from default config and user defined .env file. */
       let config = defaultConfig;
+      config.DB_NAME = project.name
+      
       if (project.env) {
         if (project.env.DB_NAME) config.DB_NAME = project.env.DB_NAME;
         if (project.env.DB_USER) config.DB_USER = project.env.DB_USER;
