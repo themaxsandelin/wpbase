@@ -1,3 +1,8 @@
+/**
+ * Dependencies
+ */
+const fs = require('fs');
+
 function Output() {
   
   function defaultScreen() {
@@ -9,7 +14,7 @@ function Output() {
   }
 
   function version() {
-    console.log(JSON.parse(fs.readFileSync(__dirname + '../package.json')).version);
+    console.log(JSON.parse(fs.readFileSync(__dirname + '/../package.json')).version);
   }
 
   function helpScreen() {
