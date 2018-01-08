@@ -1,6 +1,6 @@
 {
   "name": "wpbase",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CLI client for managing your Wordpress development.",
   "author": {
     "name": "Max Sandelin",

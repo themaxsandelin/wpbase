@@ -61,8 +61,8 @@ function Project() {
      * 2. Make sure there is a Wordpress directory. (done)
      * 3. Set up /src directory for working on the theme. (done)
      * 4. Set up base files like .editorconfig, README.md and .gitignore. (done)
-     * 5. Ensure there is a build config file for whatever building library the user selects, start with Gulp for now. 
-     * 6. Initiate git project if it is not already initiated. (done)
+     * 5. Initiate git project if it is not already initiated. (done)
+     * 6. Ensure there is a build config file for whatever building library the user selects, start with Gulp for now.
      */
 
     Wordpress.ensure(project)
