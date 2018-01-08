@@ -2,6 +2,7 @@
  * Dependencies
  */
 const fs = require('fs');
+const simpleGit = require('simple-git')(process.cwd());
 
 /**
  * WPBase files
@@ -109,6 +110,25 @@ function Development() {
     }
   }
 
+  function ensureGit() {
+    return new Promise((resolve, reject) => {
+      simpleGit.checkIsRepo((err, res) => {
+        if (err) return reject(err);
+
+        if (!res) {
+          simpleGit.init(false, (err, res) => {
+            if (err) return reject(err);
+
+            console.log('No git repo found, initialize one.');
+            resolve();
+          });
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   function ensureEnvironment(project) {
     return new Promise((resolve, reject) => {
       /** Update the files property to make sure you have the latest list. */
@@ -127,6 +147,7 @@ function Development() {
   }
 
   return {
+    ensureGit,
     ensureEnvironment
   };
 }

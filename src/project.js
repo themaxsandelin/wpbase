@@ -49,6 +49,7 @@ function Project() {
         console.log('No README.md file found, created it.');
       }
 
+      resolve();
     });
   }
 
@@ -56,15 +57,18 @@ function Project() {
     /**
      * Initialization process:
      * 
-     * 1. Make sure there is a wp-config file.
-     * 2. Make sure there is a Wordpress directory
-     * 3. Set up /src directory for working on the theme.
-     * 4. Ensure there is a build config file for whatever building library the user selects, start with Gulp for now.
+     * 1. Make sure there is a wp-config file. (done)
+     * 2. Make sure there is a Wordpress directory. (done)
+     * 3. Set up /src directory for working on the theme. (done)
+     * 4. Set up base files like .editorconfig, README.md and .gitignore. (done)
+     * 5. Ensure there is a build config file for whatever building library the user selects, start with Gulp for now. 
+     * 6. Initiate git project if it is not already initiated. (done)
      */
 
     Wordpress.ensure(project)
       .then(() => Development.ensureEnvironment(project))
       .then(() => ensureBaseFiles(project))
+      .then(() => Development.ensureGit())
       .then(() => {
         
       })
