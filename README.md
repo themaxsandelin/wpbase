@@ -15,10 +15,10 @@ You can type the following at any time in your command line to view the help scr
 ### Setup
 
 1. Create a new folder for your (if you haven't already) and cd into it.  
-`$ mkdir my-project && cd my-project`
+Example: `$ mkdir my-project && cd my-project`
 
 2. (optional) Create an .env file and configure your setup how you like it.  
-`$ touch .env && vi .env`
+Example: `$ touch .env && vi .env`
 
 3. Run the initialization process  
 `$ wpbase init`

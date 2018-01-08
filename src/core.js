@@ -50,8 +50,9 @@ function Core() {
      */
 
     Wordpress.ensure(project)
+      .then(() => Development.ensureEnvironment(project))
       .then(() => {
-        Development.ensureEnvironment(project)
+        
       })
     .catch((error) => {
       console.log(error);

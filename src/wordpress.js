@@ -15,20 +15,24 @@ function Wordpress() {
   function ensure(project) {
     return new Promise((resolve, reject) => {
       if (project.files.indexOf('wordpress') > -1) {
-        console.log('Wordpress folder found.');
-
         ensureWpContentFolder(project)
           .then(ensureConfigFile(project, false))  
-          .then(() => resolve())
+          .then(() => {
+            console.log('Wordpress in place.');
+            resolve();
+          })
         .catch((error) => reject(error));
       } else {
         console.log('No wordpress folder found, downloading wordpress..');
         download('WordPress/WordPress', project.path + '/wordpress', (error) => {
           if (error) return reject(error);
 
-          console.log('Wordpress downloaded.');
+          console.log('Done!');
           ensureConfigFile(project, true)
-            .then(() => resolve())
+            .then(() => {
+              console.log('Wordpress in place.');
+              resolve()
+            })
           .catch((error) => reject(error));
         });
       }
@@ -77,7 +81,6 @@ function Wordpress() {
         /** Check if there already is a wp-config.php file. */
         const wordpressFiles = fs.readdirSync(project.path + '/wordpress');
         if (wordpressFiles.indexOf('wp-config.php') > -1) {
-          console.log('wp-config.php file found.');
           return resolve();
         }
       }
