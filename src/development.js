@@ -4,7 +4,7 @@
 const fs = require('fs');
 
 /**
- * Project modules
+ * WPBase files
  */
 const Files = require('./files.js')();
 
@@ -66,8 +66,6 @@ function Development() {
   }
 
   function ensureFiles(project) {
-    console.log(project);
-
     /** Make sure the style.scss file exists. */
     if (sourceFolderFiles.indexOf(styleFileName) === -1) {
       fs.writeFileSync(sourceFolderPath + '/' + styleFileName, Files.generateStyleFileContents(project));
@@ -82,31 +80,31 @@ function Development() {
 
     /** Make sure the header.php file exists. */
     if (sourceFolderFiles.indexOf('header.php') === -1) {
-      fs.writeFileSync(sourceFolderPath + '/header.php', Files.generateHeaderFileContents());
+      fs.writeFileSync(sourceFolderPath + '/header.php', Files.getDefaultFile('header.php'));
       console.log('No header.php file found in the ' + sourceFolderName + ' folder, created it.');
     }
 
     /** Make sure the footer.php file exists. */
     if (sourceFolderFiles.indexOf('footer.php') === -1) {
-      fs.writeFileSync(sourceFolderPath + '/footer.php', Files.generateFooterFileContents());
+      fs.writeFileSync(sourceFolderPath + '/footer.php', Files.getDefaultFile('footer.php'));
       console.log('No header.php file found in the ' + sourceFolderName + ' folder, created it.');
     }
 
     /** Make sure the 404.php file exists. */
     if (sourceFolderFiles.indexOf('404.php') === -1) {
-      fs.writeFileSync(sourceFolderPath + '/404.php', Files.generateNotFoundFileContents());
+      fs.writeFileSync(sourceFolderPath + '/404.php', Files.getDefaultFile('404.php'));
       console.log('No 404.php file found in the ' + sourceFolderName + ' folder, created it.');
     }
 
     /** Make sure the index.php file exists. */
     if (sourceFolderFiles.indexOf('index.php') === -1) {
-      fs.writeFileSync(sourceFolderPath + '/index.php', Files.generateIndexFileContents());
+      fs.writeFileSync(sourceFolderPath + '/index.php', Files.getDefaultFile('index.php'));
       console.log('No index.php file found in the ' + sourceFolderName + ' folder, created it.');
     }
 
     /** Make sure the page.php file exists. */
     if (sourceFolderFiles.indexOf('page.php') === -1) {
-      fs.writeFileSync(sourceFolderPath + '/page.php', Files.generatePageFileContents());
+      fs.writeFileSync(sourceFolderPath + '/page.php', Files.getDefaultFile('page.php'));
       console.log('No page.php file found in the ' + sourceFolderName + ' folder, created it.');
     }
   }

@@ -10,9 +10,10 @@ const dotenv = require('dotenv');
  */
 const Wordpress = require('./wordpress.js')();
 const Development = require('./development.js')();
+const Files = require('./files.js')();
 
 
-function Core() {
+function Project() {
   /**
    * Setup the project's config object
   */
@@ -27,19 +28,31 @@ function Core() {
     project.env = dotenv.parse(new Buffer(fs.readFileSync(project.path + '/.env', 'utf8')));
   }
 
-  function displayDefaultScreen() {
-    console.log('');
-    console.log('Thank you for using WPBase for your Wordpress project! 🙌');
-    console.log('');
-    console.log('  > Type [wpbase -h] to display the help screen and learn how to use it.');
-    console.log('');
+  function ensureBaseFiles(project) {
+    return new Promise((resolve, reject) => {
+
+      /** Make sure an .editorconfig file exists */
+      if (project.files.indexOf('.editorconfig') === -1) {
+        fs.writeFileSync(project.path + '/.editorconfig', Files.getDefaultFile('editorconfig'));
+        console.log('No .editorconfig file found, created it.');
+      }
+
+      /** Make sure an .gitignore file exists. */
+      if (project.files.indexOf('.gitignore') === -1) {
+        fs.writeFileSync(project.path + '/.gitignore', Files.getDefaultFile('gitignore'));
+        console.log('No .gitignore file found, created it.');
+      }
+
+      /** Make sure a README.md file exists. */
+      if (project.files.indexOf('README.md') === -1) {
+        fs.writeFileSync(project.path + '/README.md', Files.generateReadmeFileContents(project));
+        console.log('No README.md file found, created it.');
+      }
+
+    });
   }
 
-  function displayHelpScreen() {
-
-  }
-
-  function initializeProject() {
+  function initialize() {
     /**
      * Initialization process:
      * 
@@ -51,6 +64,7 @@ function Core() {
 
     Wordpress.ensure(project)
       .then(() => Development.ensureEnvironment(project))
+      .then(() => ensureBaseFiles(project))
       .then(() => {
         
       })
@@ -60,10 +74,8 @@ function Core() {
   }
 
   return {
-    displayDefaultScreen,
-    displayHelpScreen,
-    initializeProject
+    initialize
   };
 }
 
-module.exports = Core;
+module.exports = Project;

@@ -3,17 +3,18 @@
 /**
  * WPBase files
  */
-const Core = require('./src/core.js')();
+const Output = require('./src/output.js')();
+const Project = require('./src/project.js')();
 
 
 /**
  * Set up main script based on passed arguments.
 */
 const args = process.argv.splice(2, process.argv.length);
-if (!args.length) return Core.displayDefaultScreen();
+if (!args.length) return Output.defaultScreen();
 
 const action = args[0];
-if (action === '-h') return Core.displayHelpScreen();
-if (action === 'init') return Core.initializeProject();
+if (action === '-h') return Output.helpScreen();
+if (action === 'init') return Project.initialize();
 
 console.log(action);

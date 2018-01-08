@@ -15,33 +15,23 @@ function Files() {
     return contents;
   }
 
-  function generateHeaderFileContents() {
-    return fs.readFileSync(__dirname + '/default-files/header.php', 'utf8');
+  function generateReadmeFileContents(project) {
+    let contents = fs.readFileSync(__dirname + '/default-files/README.md', 'utf8');
+    while (contents.indexOf('[project-name]') > -1) {
+      contents = contents.replace('[project-name]', project.name);
+    }
+    contents = contents.replace('[description]', project.name + ' Wordpress theme');
+    return contents;
   }
 
-  function generateFooterFileContents() {
-    return fs.readFileSync(__dirname + '/default-files/footer.php', 'utf8');
-  }
-
-  function generateNotFoundFileContents() {
-    return fs.readFileSync(__dirname + '/default-files/404.php', 'utf8');
-  }
-
-  function generateIndexFileContents() {
-    return fs.readFileSync(__dirname + '/default-files/index.php', 'utf8');
-  }
-
-  function generatePageFileContents() {
-    return fs.readFileSync(__dirname + '/default-files/page.php', 'utf8');
+  function getDefaultFile(file) {
+    return fs.readFileSync(__dirname + '/default-files/' + file, 'utf8');
   }
 
   return {
     generateStyleFileContents,
-    generateHeaderFileContents,
-    generateFooterFileContents,
-    generateNotFoundFileContents,
-    generateIndexFileContents,
-    generatePageFileContents
+    generateReadmeFileContents,
+    getDefaultFile
   };
 }
 
